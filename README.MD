@@ -18,8 +18,13 @@ filebeat ====> redis ====> logstash ====> elasticsearch =======> kibana
 
 ##elk_auto_deploy 实现功能：
 - 自动部署
+
 根据上述架构，自动部署安装各组件服务
+
 - 自动调优
+
 自动对各组件进行性能调优
+
 - 统一管理
+
 提供对各组件服务进行统一管理功能，包括start、stop、status、restart
