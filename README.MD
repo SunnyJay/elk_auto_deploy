@@ -1,11 +1,10 @@
 #elk_auto_deploy
 版本 v1.0
-
 这是一个用于自动部署 “ELK 日志分析平台” 的 python fabric 项目。
 
-它针对的 “ELK 日志分析平台” 架构如下：
+##它针对的 “ELK 日志分析平台” 架构如下：
 
-[shipper]     [broker]     [index]      [search & storage]   [web-interface] 
+[shipper]     [broker]     [index]      [search & storage]   [web-interface]
 filebeat ====> redis ====> logstash ====> elasticsearch =======> kibana    
 
 如上面所示，
@@ -15,7 +14,7 @@ logstash部署多个，各自部署于独立的服务器上。
 elasticsearch部署多个，各自部署于独立的服务器上，构成集群。
 kibana部署一个，部署于独立的服务器上。
 
-elk_auto_deploy 实现的功能有：
+##elk_auto_deploy 实现的功能有：
 - 自动部署
 根据上述架构，自动部署组件服务，包括 elasticsearch、logstash、kibana、redis 
 - 自动调优
