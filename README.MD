@@ -6,11 +6,7 @@
 它针对的 “ELK 日志分析平台” 架构如下：
 
 [shipper]     [broker]     [index]      [search & storage]   [web-interface] 
-
-filebeat                   logstash       elasticsearch
 filebeat ====> redis ====> logstash ====> elasticsearch =======> kibana    
-filebeta                   logstash       elasticsearch
-  ...                        ...              ...
 
 如上面所示，
 filebeat部署多个，分别部署于各个需要被监控日志的服务器上。
