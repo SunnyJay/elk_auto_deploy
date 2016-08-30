@@ -251,6 +251,63 @@ def delete_temp_exec(tool_name):
 def check_cluster():
 	run("curl %s:9200/_cluster/health" % env.host_string)
 
+############################
+# filebeat:set log path
+############################
+@task
+@runs_once
+@roles("filebeat")
+def set_log_path():
+	i = 0
+	for ip in env.roledefs["filebeat"]:
+		execute(set_log_path_exec, filebeat_role = config.filebeat_roles[i], hosts = ip)
+		i = i+1
+
+################################
+# filebeat:delete register file
+################################
+@task
+@runs_once
+@roles("filebeat")
+def delete_reg_file():
+	stop("filebeat")
+	execute(delete_reg_file, hosts = nev.roledefs["filebeat"])
+	start("filebeat")
+
+################################
+# install plugins
+################################
+@task
+@runs_once
+@roles("elasticsearch")
+def install_plugins():
+	#install kopf
+	execute(install_plugin_kopf_exec, hosts = env.roledefs["elasticsearch"])
+
+	#install head
+	execute(install_plugin_head_exec, hosts = env.roledefs["elasticsearch"])
+
+	#install curator
+	execute(install_plugin_curator_exec, hosts = env.roledefs["kibana"])
+
+	#install sense
+	execute(install_plugin_sense_exec, hosts = env.roledefs["kibana"])
+
+@task
+def install_plugin_kopf_exec():
+	run("/usr/share/elasticsearch/bin/plugin install file:///root/elk_tools_temp/elasticsearch/elasticsearch-kopf-master.zip")
+
+@task
+def install_plugin_head_exec():
+	run("/usr/share/elasticsearch/bin/plugin install file:///root/elk_tools_temp/elasticsearch/elasticsearch-head-master.zip")
+
+@task
+def install_plugin_curator_exec():
+	pass
+
+@task
+def install_plugin_sense_exec():
+	run("/opt/kibana/bin/kibana plugin -i sense -u file:///root/elk_tools_temp/kibana/sense-2.0.0-beta5.tar.gz")
 
 ############################
 # main depoly
@@ -263,4 +320,5 @@ def deploy():
 	upload_all()
 	install_all()
 	configure_all()
+	set_log_path() #filebeat
 	delete_temp_all()
